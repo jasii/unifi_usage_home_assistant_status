@@ -1,16 +1,19 @@
-# unifi_usage_wled_status
+# unifi_usage_home_assistant_status
 
 This repo contains the files used to monitor monthly data usage on a Ubiquiti USG Pro. If you have a crappy ISP, this will allow you to quickly see how close you are to hitting your monthly data cap.
 
-Color of WLED LEDs will change based on how much data has been transferred over WAN port.
+Uses POST /api/states/<entity_id> from the Home Assistant API
 
-Visit https://tynick.com/blog/12-30-2019/internet-data-usage-monitoring-so-you-dont-hit-your-data-cap/ for full instructions on how to get everything setup.
+https://developers.home-assistant.io/docs/api/rest#actions
+
+Visit tynick's blog https://tynick.com/blog/12-30-2019/internet-data-usage-monitoring-so-you-dont-hit-your-data-cap/ for full instructions on how to get everything setup.
+Instructions are basically the same. Just change the curl URL to point to your server and plug in your own "Long-Lived Access Token"
 
 ## get_usage.sh
 
 Queries the WAN port to see how much data has been used (RX and TX) since the last time it was reset.
 
-Sends HTTP request to WLED to change colors based on data usage.
+Sends HTTP request to Home Assistant with data usage.
 
 ## reset_usage.sh
 
