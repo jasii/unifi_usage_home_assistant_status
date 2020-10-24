@@ -50,8 +50,9 @@ echo "total gb = "${total_gb_used}""
 #    curl "http://"${wled_ip}"/win"${great}""
 #fi
 
-##### ADD YOUR TOKEN INTO THE CURL COMMAND #####
+##### ADD YOUR TOKEN INTO THE CURL COMMAND
+##### CHANGE YOUR URL TO POINT TO YOUR HA SERVER
 curl -X POST -H "Authorization: Bearer TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"name": "Total Internet Usage", "state": "${total_gb_used}", "icon": "mdi:network", "attributes": {"unit_of_measurement": "GB", "total_up": "${tx_gb_used}", "total_down": "${rx_gb_used}"}}' \
-  http://192.168.1.21:8123/api/states/sensor.total_internet_usage
+  -d '{"state": "'${total_gb_used}'", "attributes": {"friendly_name": "Total Internet Usage", "icon": "mdi:network", "unit_of_measurement": "GB", "total_up": "'${tx_gb_used}'", "total_down": "'${rx_gb_used}'"}}' \
+  http://YOUR-HA-URL/api/states/sensor.total_internet_usage
