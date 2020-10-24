@@ -12,7 +12,7 @@
 					"executable": {
 						"path": "/config/scripts/reset_usage.sh"
 					},
-					"crontab-spec": "1 0 26 * *"
+					"crontab-spec": "1 0 1 * *"
 				}
 			}
 		}

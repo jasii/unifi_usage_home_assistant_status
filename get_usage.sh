@@ -5,20 +5,20 @@
 
 # USG port
 # uncomment/comment the next two lines based on what USG model you have
-interface="eth2" # USG PRO 4
-#interface="eth0" # USG
+#interface="eth2" # USG PRO 4
+interface="eth0" # USG
 
 
 # IP address of WLED node you want to control
-wled_ip='192.168.1.153'
+#wled_ip='192.168.1.153'
 
 # status colors
-very_bad='&A=128&FX=1&SX=245&R=255&G=0&B=0' # red flashing
-bad='&A=128&FX=0&SX=0&R=255&G=0&B=0' # red
-warn='&A=128&FX=0&SX=0&R=255&G=127&B=0' # orangish
-ok='&A=128&FX=0&SX=0&R=255&G=255&B=0' # yellowish
-good='&A=128&FX=0&SX=0&R=127&G=255&B=0' # light green
-great='&A=128&FX=0&SX=0&R=0&G=255&B=0' # green
+#very_bad='&A=128&FX=1&SX=245&R=255&G=0&B=0' # red flashing
+#bad='&A=128&FX=0&SX=0&R=255&G=0&B=0' # red
+#warn='&A=128&FX=0&SX=0&R=255&G=127&B=0' # orangish
+#ok='&A=128&FX=0&SX=0&R=255&G=255&B=0' # yellowish
+#good='&A=128&FX=0&SX=0&R=127&G=255&B=0' # light green
+#great='&A=128&FX=0&SX=0&R=0&G=255&B=0' # green
 
 # get total bytes from WAN interface
 rx_bytes_used=$(/opt/vyatta/bin/vyatta-op-cmd-wrapper show interfaces ethernet "${interface}" | grep 'RX' -A1 | tail -1 | awk '{ print $1 }' | awk '{ gb =$1 /1024/1024/1024; print gb }')
@@ -36,16 +36,22 @@ echo "tx gb = "${tx_gb_used}""
 echo "total gb = "${total_gb_used}""
 
 # set wled params based on total_gb_used
-if [[ "${total_gb_used}" -gt 999 ]]; then
-    curl "http://"${wled_ip}"/win"${very_bad}""
-elif [[ "${total_gb_used}" -gt 900 ]]; then
-    curl "http://"${wled_ip}"/win"${bad}""
-elif [[ "${total_gb_used}" -gt 600 ]]; then
-    curl "http://"${wled_ip}"/win"${warn}""
-elif [[ "${total_gb_used}" -gt 400 ]]; then
-    curl "http://"${wled_ip}"/win"${ok}""
-elif [[ "${total_gb_used}" -gt 200 ]]; then
-    curl "http://"${wled_ip}"/win"${good}""
-elif [[ "${total_gb_used}" -ge 0 ]]; then
-    curl "http://"${wled_ip}"/win"${great}""
-fi
+#if [[ "${total_gb_used}" -gt 999 ]]; then
+#    curl "http://"${wled_ip}"/win"${very_bad}""
+#elif [[ "${total_gb_used}" -gt 900 ]]; then
+#    curl "http://"${wled_ip}"/win"${bad}""
+#elif [[ "${total_gb_used}" -gt 600 ]]; then
+#    curl "http://"${wled_ip}"/win"${warn}""
+#elif [[ "${total_gb_used}" -gt 400 ]]; then
+#    curl "http://"${wled_ip}"/win"${ok}""
+#elif [[ "${total_gb_used}" -gt 200 ]]; then
+#    curl "http://"${wled_ip}"/win"${good}""
+#elif [[ "${total_gb_used}" -ge 0 ]]; then
+#    curl "http://"${wled_ip}"/win"${great}""
+#fi
+
+##### ADD YOUR TOKEN INTO THE CURL COMMAND #####
+curl -X POST -H "Authorization: Bearer TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Total Internet Usage", "state": "${total_gb_used}", "icon": "mdi:network", "attributes": {"unit_of_measurement": "GB", "total_up": "${tx_gb_used}", "total_down": "${rx_gb_used}"}}' \
+  http://192.168.1.21:8123/api/states/sensor.total_internet_usage
